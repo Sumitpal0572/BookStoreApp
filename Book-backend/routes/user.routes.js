@@ -11,14 +11,14 @@ router.post("/sign-up", async (req, res) => {
 
         // check existing user
 
-        const existingUsername = await User.find({ username: username });
-        if (existingusername) {
+        const existingUsername = await User.findOne({ username: username });
+        if (existingUsername) {
             return res.status(400).json({ message: "Username already exist" })
         }
 
         // check existing Email
 
-        const existingEmail = await User.find({ email: email });
+        const existingEmail = await User.findOne({ email: email });
         if (existingEmail) {
             return res.status(400).json({ message: "Email already exist" })
         }
@@ -28,6 +28,11 @@ router.post("/sign-up", async (req, res) => {
             return res.status(400).json({ message: "password should be greater then 4" })
         }
 
+        //add new user
+
+        const newUser = new User({ username: username, email: email, password: password, address: address });
+        await newUser.save()
+        return res.status(200).json({ message: 'SignUp successfully' })
 
     } catch (error) {
         res.status(500).json({ message: "Internal Server Error" })
