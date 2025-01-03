@@ -50,9 +50,14 @@ router.post("/sign-in", async (req, res) => {
         if (!existingUser) {
             res.status(400).json({ message: "Invalid Credentials" })
         }
-await bcrypt.compare(password , existingUser.password,(err,data)=>{
-    
-})
+        await bcrypt.compare(password, existingUser.password, (err, data) => {
+            if (data) {
+                res.status(200).json({ message: "Signin successfully" })
+            } else {
+                res.status(400).json({ message: "Invalid Credentials" })
+
+            }
+        })
     } catch (error) {
         res.status(500).json({ message: "Internal Server Error" })
     }
