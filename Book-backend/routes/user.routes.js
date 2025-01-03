@@ -1,6 +1,6 @@
 const router = require("express").Router()
 const User = require("../Models/user")
-
+const bcrypt = require("bcryptjs")
 //sign-up route
 router.post("/sign-up", async (req, res) => {
     try {
@@ -28,12 +28,31 @@ router.post("/sign-up", async (req, res) => {
             return res.status(400).json({ message: "password should be greater then 4" })
         }
 
+        const hasspass = await bcrypt.hash(password, 10)
+
         //add new user
 
-        const newUser = new User({ username: username, email: email, password: password, address: address });
+        const newUser = new User({ username: username, email: email, password: hasspass, address: address });
         await newUser.save()
         return res.status(200).json({ message: 'SignUp successfully' })
 
+    } catch (error) {
+        res.status(500).json({ message: "Internal Server Error" })
+    }
+})
+
+//sign-in
+
+router.post("/sign-in", async (req, res) => {
+    try {
+        const { username, password } = req.body
+        const existingUser = await User.findOne(username)
+        if (!existingUser) {
+            res.status(400).json({ message: "Invalid Credentials" })
+        }
+await bcrypt.compare(password , existingUser.password,(err,data)=>{
+    
+})
     } catch (error) {
         res.status(500).json({ message: "Internal Server Error" })
     }
