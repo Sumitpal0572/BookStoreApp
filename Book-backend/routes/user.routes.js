@@ -1,6 +1,7 @@
 const router = require("express").Router()
 const User = require("../Models/user")
 const bcrypt = require("bcryptjs")
+
 //sign-up route
 router.post("/sign-up", async (req, res) => {
     try {
@@ -24,7 +25,7 @@ router.post("/sign-up", async (req, res) => {
         }
 
         // check password length
-        if (password <= 5) {
+        if (password.length <= 5) {
             return res.status(400).json({ message: "password should be greater then 4" })
         }
 
@@ -46,7 +47,8 @@ router.post("/sign-up", async (req, res) => {
 router.post("/sign-in", async (req, res) => {
     try {
         const { username, password } = req.body
-        const existingUser = await User.findOne(username)
+
+        const existingUser = await User.findOne({ username })
         if (!existingUser) {
             res.status(400).json({ message: "Invalid Credentials" })
         }
@@ -55,9 +57,8 @@ router.post("/sign-in", async (req, res) => {
                 res.status(200).json({ message: "Signin successfully" })
             } else {
                 res.status(400).json({ message: "Invalid Credentials" })
-
             }
-        })
+        });
     } catch (error) {
         res.status(500).json({ message: "Internal Server Error" })
     }
