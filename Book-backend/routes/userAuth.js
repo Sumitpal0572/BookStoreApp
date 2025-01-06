@@ -7,5 +7,13 @@ const authenticateToken = (req, res, next) => {
     if (token == null) {
         return res.status(401).json({ message: "Authentication token required" });
     }
-    jwt.verify(token, "bookstore0572",(err,user))
+    jwt.verify(token, "bookstore0572", (err, user) => {
+        if (err) {
+            return res.status(403).json(err);
+        }
+        req.user = user
+        next();
+    })
 }
+
+module.exports = { authenticateToken }
