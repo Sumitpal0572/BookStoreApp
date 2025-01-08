@@ -69,4 +69,14 @@ router.post("/sign-in", async (req, res) => {
     }
 })
 
+// get-user-information
+
+router.get("/get-user-information", async (req, res) => {
+    try {
+
+    } catch (error) {
+        res.status(500).json({ message: "Internal Server Error" })
+    }
+})
+
 module.exports = router;
