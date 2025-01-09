@@ -2,6 +2,7 @@ const router = require("express").Router()
 const User = require("../Models/user")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
+const { authenticateToken } = require("./userAuth")
 
 //sign-up route
 router.post("/sign-up", async (req, res) => {
@@ -71,9 +72,11 @@ router.post("/sign-in", async (req, res) => {
 
 // get-user-information
 
-router.get("/get-user-information", async (req, res) => {
+router.get("/get-user-information", authenticateToken, async (req, res) => {
     try {
-
+        const { id } = req.headers
+        const data = await User.findById(id)
+        return res.status(200).json(data)
     } catch (error) {
         res.status(500).json({ message: "Internal Server Error" })
     }
