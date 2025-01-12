@@ -62,5 +62,14 @@ router.delete("/delete-book", authenticateToken, async (req, res) => {
     }
 })
 
+// get all books 
+router.get("/get-book", authenticateToken, (req, res) => {
+    try {
+        const books = awaitBook.find().sort({ created: -1 })
+        return res.json({ status: 'success', data: books })
+    } catch (error) {
+        return res.status(500).json({ message: "An error occurred" })
+    }
+})
 
 module.exports = router
