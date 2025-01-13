@@ -72,4 +72,16 @@ router.get("/get-book", authenticateToken, async (req, res) => {
     }
 })
 
+
+// get recently added books
+
+router.get("/get-recent-books", authenticateToken, async (req, res) => {
+    try {
+        const books = await Book.find().sort({ created: -1 }).limit(4)
+        return res.json({ status: 'success', data: books })
+    } catch (error) {
+        return res.status(500).json({ message: "An error occurred" })
+    }
+})
+
 module.exports = router
