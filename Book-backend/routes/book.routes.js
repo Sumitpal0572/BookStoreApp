@@ -84,4 +84,16 @@ router.get("/get-recent-books", authenticateToken, async (req, res) => {
     }
 })
 
+// get book by id
+
+router.get("/get-book-by-id/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const book = await Book.findById(id);
+        return res.json({ status: "success", data: book })
+    } catch (error) {
+        return res.json({ mesaage: "An error Occurred" })
+    }
+})
+
 module.exports = router
