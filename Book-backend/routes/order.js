@@ -3,13 +3,15 @@ const { authenticateToken } = require("./userAuth")
 const Book = require("../Models/book")
 const order = require("../Models/order")
 const router = require("./cart")
+const User = require("../Models/user")
 
 //place-order
 
 router.post("/place-order", authenticateToken, async (req, res) => {
     try {
-        const { id } = req.headers
-        const { order } = req.body
+        const { id } = req.headers;
+        const { order } = req.body;
+
         for (const orderData of order) {
             const newOrder = new Order({ user: id, book: orderData._id });
             const orderDataFromdb = await newOrder.save();
@@ -20,7 +22,6 @@ router.post("/place-order", authenticateToken, async (req, res) => {
             });
 
             //clearing cart
-
             await User.findByIdAndUpdate(id, {
                 $pull: { cart: orderData._id },
             });
