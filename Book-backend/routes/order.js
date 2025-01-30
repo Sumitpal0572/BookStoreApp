@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { authenticateToken } = require("./userAuth")
 const Book = require("../Models/book")
-const order = require("../Models/order")
+const Order = require("../Models/order")
 const router = require("./cart")
 const User = require("../Models/user")
 
@@ -35,5 +35,23 @@ router.post("/place-order", authenticateToken, async (req, res) => {
     }
 })
 
+// get order history of particular User
 
+router.get("/get-order-histroy", authenticateToken, async (req, res) => {
+    try {
+        const { id } = req.headers;
+        const userData = await User.findById(id).populate({
+            path: "orders",
+            populate: { path: "book" },
+        });
+
+        const orderData = userData.orders.reverse();
+        return res.json({
+            status: "Success",
+            data: orderData,
+        })
+    } catch (error) {
+        return res.status(500).json({ message: "An Error occured" })
+    }
+})
 module.exports = router
