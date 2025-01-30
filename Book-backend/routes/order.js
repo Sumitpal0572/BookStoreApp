@@ -54,4 +54,24 @@ router.get("/get-order-histroy", authenticateToken, async (req, res) => {
         return res.status(500).json({ message: "An Error occured" })
     }
 })
+
+// get all orders -- admin
+router.get("/get-all-orders", authenticateToken, async (req, res) => {
+    try {
+        const userData = await Order.find()
+            .populate({
+                path: "book",
+            })
+            .populate({
+                path: "user",
+            })
+            .sort({ createdAt: -1 });
+        return res.json({
+            status: "Success",
+            data: userData,
+        });
+    } catch (error) {
+        return res.status(500).json({ message: "An Error occured" })
+    }
+})
 module.exports = router
