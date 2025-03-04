@@ -1,5 +1,6 @@
 const express = require("express")
 const app = express();
+const cors = require("cors");
 require("dotenv").config()
 require("./conn/connect")
 const User = require("./routes/user.routes")
@@ -9,7 +10,7 @@ const Cart = require("./routes/cart")
 const Order = require("./routes/order")
 
 PORT = 2000;
-
+app.use(cors());
 app.use(express.json())
 //routes
 app.use("/api/v1", User)
