@@ -44,12 +44,13 @@ router.get("/get-order-history", authenticateToken, async (req, res) => {
             populate: { path: "book" },
         });
 
-        const ordersData = userData.orders.reverse();
+        const orderData = userData.orders.reverse();
         return res.json({
             status: "Success",
-            data: ordersData,
+            data: orderData,
         })
     } catch (error) {
+        console.log(error);
         return res.status(500).json({ message: "An Error occured" })
     }
 })
