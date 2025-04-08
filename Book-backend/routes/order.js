@@ -36,7 +36,7 @@ router.post("/place-order", authenticateToken, async (req, res) => {
 
 // get order history of particular User
 
-router.get("/get-order-histroy", authenticateToken, async (req, res) => {
+router.get("/get-order-history", authenticateToken, async (req, res) => {
     try {
         const { id } = req.headers;
         const userData = await User.findById(id).populate({
@@ -44,10 +44,10 @@ router.get("/get-order-histroy", authenticateToken, async (req, res) => {
             populate: { path: "book" },
         });
 
-        const orderData = userData.orders.reverse();
+        const ordersData = userData.orders.reverse();
         return res.json({
             status: "Success",
-            data: orderData,
+            data: ordersData,
         })
     } catch (error) {
         return res.status(500).json({ message: "An Error occured" })
